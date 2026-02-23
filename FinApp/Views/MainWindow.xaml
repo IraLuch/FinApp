@@ -1,0 +1,97 @@
+﻿<Window x:Class="FinApp.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FinApp.Models"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Language="ru-RU"
+         mc:Ignorable="d"
+        
+        Title="MainWindow" Height="450" Width="800">
+ 
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="Лучина Ирина Алексеевна" HorizontalAlignment="Center"></Label>
+        <Grid Margin="10" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <StackPanel  Orientation="Horizontal" Margin="0 0 0 10">
+                    <Label Style="{StaticResource LabelAligment}" Content="Сумма:" Target="{Binding ElementName=AmountTextBox}"></Label>
+                    <TextBox Name="AmountTextBox" Width="100"></TextBox>
+                    <Label Style="{StaticResource LabelAligment}" Content="Категория:" Target="{Binding ElementName=CategoryComboBox}"></Label>
+                    <ComboBox x:Name="CategoryComboBox" Width="100" >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                                    <Button Content="×"
+                                    Tag="{Binding}"
+                        Grid.Column="1"
+                        Foreground="Red"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        FontWeight="Bold"
+                        Margin="5,0,0,0"
+                        Click="DeleteCategoryButton_Click" >
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Grid}}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button Margin="7 0 0 0" Style="{StaticResource PurpleButton}" Content="+" Click="AddCategoryButton_Click" ></Button>
+                    <Label Style="{StaticResource LabelAligment}" Content="Тип:" Target="{Binding ElementName=TypeComboBox}"></Label>
+                    <ComboBox x:Name="TypeComboBox"  DisplayMemberPath="Description"
+              SelectedValuePath="Value" Width="100" Margin="5,0"/>
+                    <Label Style="{StaticResource LabelAligment}" Content="Дата:" Target="{Binding ElementName=DatePicker}"></Label>
+                    <DatePicker Language="ru-RU" x:Name="DatePicker"   IsDropDownOpen="False"  Width="130"  ></DatePicker>
+
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal" Margin="0 0 0 10">
+                    <Label Style="{StaticResource LabelAligment}" Content="Описание:" Target="{Binding ElementName=RichTextBox}"></Label>
+                    <TextBox Margin="0 0 30 0" Name="DescriptionTextBox" Width="300" TextWrapping="Wrap"></TextBox>
+                    <Button Style="{StaticResource PurpleButton}" Click="AddTransactionButton_Click"  Content="Добавить"></Button>
+                </StackPanel>
+            </StackPanel>
+            <Grid Grid.Row="1">
+                <DataGrid Name="DataGridTrs" LoadingRow="DataGridTrs_LoadingRow"  IsReadOnly="True" AutoGenerateColumns="False" CanUserDeleteRows="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="*" Header="Дата" Binding="{Binding Date}" />
+                        <DataGridTextColumn Width="*" Header="Тип" Binding="{Binding TypeOfOperationDisplay}" />
+                        <DataGridTextColumn Width="*"  Header="Категория" Binding="{Binding Category.Name}" />
+                        <DataGridTextColumn Width="*"  Header="Сумма" Binding="{Binding Amount}" />
+                        <DataGridTextColumn Width="*" Header="Описание" Binding="{Binding Description}" />
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Удалить запись" Click="DeleteTransaction_Click"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
