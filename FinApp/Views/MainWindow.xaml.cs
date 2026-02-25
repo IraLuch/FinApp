@@ -3,7 +3,9 @@ using FinApp.Models;
 using FinApp.Presenter;
 using FinApp.Views;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -21,14 +23,19 @@ namespace FinApp.Views
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window, IMainWindow
-    {
-
-
-     
+    {  
         public Category SelectedCategory
         {
             get => (Category)CategoryComboBox.SelectedItem;
             set => CategoryComboBox.SelectedItem = value;
+        }
+
+
+        public Wallet SelectedWallet
+        {
+            get => (Wallet)ComboBoxWallet.SelectedItem; 
+            set => ComboBoxWallet.SelectedItem = value;
+
         }
 
         public TypeOfOperation SelectedTypeOfOperation
@@ -55,13 +62,29 @@ namespace FinApp.Views
             set => DatePicker.SelectedDate = value;
         }
 
+
+        public string TotalBalance
+        {
+            get => TotalBalanceTextBlock.Text;
+            set => TotalBalanceTextBlock.Text = value;
+        }
+
+        public string SelectedWalletBalance
+        {
+            get => SelectedWalletBalanceTexrBlock.Text;
+            set => SelectedWalletBalanceTexrBlock.Text = value;
+        }
+
+
         private readonly MainPresenter _presenter;
 
         public MainWindow()
         {
             InitializeComponent();
             _presenter = new MainPresenter(this, new FinanceProvider(new DbFinance()));
+     
             Date = DateTime.Now;
+
         }
 
         public void ShowMessage(string message, string title = "Внимание!") => MessageBox.Show(message, title);
@@ -76,16 +99,49 @@ namespace FinApp.Views
         public async void DeleteCategoryButton_Click(object sender, EventArgs e)
         {
             var button = sender as Button;
-
-      
             var cat = button?.Tag as Category;
             await _presenter.DeleteCategory(cat);
 
         }
 
-        public async void AddCategoryButton_Click(Object sender, EventArgs e)
+        private async void AddCategoryButton_Click(Object sender, EventArgs e)
         {
             await _presenter.AddCategoryDialog();
+        }
+
+        public string? OpenCategoryDialog()
+        {
+            var dialog = new AddCategoryWindow
+            {
+                Owner = Application.Current.MainWindow //дочернее окно
+            };
+            return dialog.ShowDialog() == true
+        ? dialog.Input
+        : null;
+
+        }
+
+        public string? OpenWalletDialog()
+        {
+            var dialog = new AddWalletWindow
+            {
+                Owner = Application.Current.MainWindow //дочернее окно
+            };
+            return dialog.ShowDialog() == true
+        ? dialog.Input
+        : null;
+
+        }
+        private async void AddWallet_Click(object obj, EventArgs e)
+        {
+            await _presenter.AddWalletDialog();  
+        }
+
+        private async void DeleteWalletButton_Click(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            var wl = button?.Tag as Wallet;
+            await _presenter.DeleteWallet(wl);
         }
 
         public async void AddTransactionButton_Click(object sender, EventArgs e)
@@ -121,7 +177,22 @@ namespace FinApp.Views
             DataGridTrs.ItemsSource = transactions;
         }
 
+       public void SetWallets(ObservableCollection<Wallet> wallets)
+        {
+            ComboBoxWallet.ItemsSource = wallets;
+            
+        }
+
+        private async void WalletSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+            if (_presenter == null)
+                return;
+            await _presenter.LoadDataWithWallet(SelectedWallet);
+        }
+
     
+
         private void DataGridTrs_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             
