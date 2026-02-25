@@ -15,19 +15,30 @@ namespace FinApp.Views
     interface IMainWindow
     {
         Category SelectedCategory { get; set; }
+        Wallet SelectedWallet { get; set; }
         TypeOfOperation SelectedTypeOfOperation { get; set; }
         string Amount { get; set; }
         string Description { get; set; }
         DateTime Date { get; set; }
 
+        string SelectedWalletBalance {  get; set; }
+
+        string TotalBalance { get; set; }
+        //void SetTotalBalence();
+
+        //void SetSelectedWalletBalance();
+
         public void ShowMessage(string message, string title = "Внимание!");
 
  
         void SetCategories(ObservableCollection<Category> cats);
-        public void SetOperationTypes(List<EnumHelper.ValueDescription> types);
+        void SetOperationTypes(List<EnumHelper.ValueDescription> types);
         void SetTransactions(ObservableCollection<Transaction> transactions);
 
+        void SetWallets(ObservableCollection<Wallet> wallets);
         void ClearInputs();
+        string? OpenCategoryDialog();
+        string? OpenWalletDialog();
 
     }
 }

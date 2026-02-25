@@ -1,5 +1,5 @@
 ﻿
-using Fin.DataBase;
+using FinApp.DataBase;
 using FinApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FinApp.DataBase
 {
-    class FinanceProvider : IFinanceProvider
+     class FinanceProvider : IFinanceProvider
     {
         private readonly DbFinance _db;
 
@@ -19,11 +19,28 @@ namespace FinApp.DataBase
             _db = db;
         }
 
-        public async Task<IEnumerable<Transaction>> GetAllTransactionsAsync()
+        public async Task AddWalletAsync(Wallet wallet)
+        {
+            _db.Wallets.Add(wallet);
+            await _db.SaveChangesAsync();
+        }
+        public async Task DeleteWalletAsync(Wallet wallet)
+        {
+            _db.Wallets.Remove(wallet);
+            await _db.SaveChangesAsync();
+           
+        }
+        public async Task<IEnumerable<Wallet>> GetAllWalletsAsync()
+        {
+            return await _db.Wallets
+            .Include(w => w.Transactions).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Transaction>> GetAllTransactionsAsync(Wallet wallet)
         {
             return await _db.Transactions
                 .Include(t => t.Category)
-                .ToListAsync();
+                .Where(c => c.WalletId == wallet.Id).ToListAsync();
         }
 
         public async Task AddTransactionAsync(Transaction transaction)
@@ -31,9 +48,9 @@ namespace FinApp.DataBase
             _db.Transactions.Add(transaction);
             await _db.SaveChangesAsync();
         }
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(Wallet wallet)
         {
-            return await _db.Categories.ToListAsync();
+            return await _db.Categories.Where(c => c.WalletId == wallet.Id).ToListAsync();
         }
         public async Task DeleteTransactionAsync(Transaction transaction)
         {
