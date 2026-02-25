@@ -12,7 +12,6 @@
                 <ui:ThemeResources RequestedTheme="Light" />
                 <ResourceDictionary Source="/Dictionaries/Controls/Inputs.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="/Dictionaries/Controls/Buttons.xaml"></ResourceDictionary>
-
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="MainFont">Segoe UI</FontFamily>
             <Style TargetType="{x:Type Control}">

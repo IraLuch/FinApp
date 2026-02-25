@@ -9,77 +9,16 @@
         Language="ru-RU"
          mc:Ignorable="d"
         
-        Title="MainWindow" Height="450" Width="Auto">
+        Title="MainWindow" Height="450" Width="800">
  
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Row="0"  Grid.Column="0" Grid.ColumnSpan="2" Content="Лучина Ирина Алексеевна" HorizontalAlignment="Center"></Label>
-        <Border  Grid.Column="0" Grid.RowSpan="2" BorderBrush="Gray" BorderThickness="0, 0, 1, 0">
-            <StackPanel Margin="10 0 5 0">
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Баланс всех кошельков: "></Label>
-                    <TextBlock x:Name="TotalBalanceTextBlock" />
-                </StackPanel>
-                <Label Content="Кошелек:" FontWeight="Bold" Margin="0,10,0,5"/>
-                <StackPanel Orientation="Horizontal">
-                    <ComboBox  SelectionChanged="WalletSelectionChanged" MaxDropDownHeight="200" 
-          Name="ComboBoxWallet" 
-          Width="150"                     
-          HorizontalAlignment="Left">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
-                                    <Button Content="×"
-             Tag="{Binding}"
- Grid.Column="1"
- Foreground="Red"
- Background="Transparent"
- BorderBrush="Transparent"
- FontWeight="Bold"
- Margin="5,0,0,0"
- Click="DeleteWalletButton_Click" >
-                                        <Button.Style>
-                                            <Style TargetType="Button">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Grid}}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
-                                </Grid>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <Button Style="{StaticResource PurpleButton}" 
-        Content="+" 
-       Click="AddWallet_Click" 
-        Margin="5,0,0,0" 
-        MinWidth="35"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-                    <Label Content="Баланс текущего кошелька: " ></Label>
-                    <TextBlock x:Name="SelectedWalletBalanceTexrBlock" />
-                </StackPanel>
-            </StackPanel>
-        </Border>
-        <Grid Grid.Row="1" Grid.Column="1" Margin="10">
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="Лучина Ирина Алексеевна" HorizontalAlignment="Center"></Label>
+        <Grid Margin="10" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -89,7 +28,7 @@
                     <Label Style="{StaticResource LabelAligment}" Content="Сумма:" Target="{Binding ElementName=AmountTextBox}"></Label>
                     <TextBox Name="AmountTextBox" Width="100"></TextBox>
                     <Label Style="{StaticResource LabelAligment}" Content="Категория:" Target="{Binding ElementName=CategoryComboBox}"></Label>
-                    <ComboBox x:Name="CategoryComboBox" Width="150" >
+                    <ComboBox x:Name="CategoryComboBox" Width="100" >
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -134,7 +73,7 @@
                 <StackPanel  Orientation="Horizontal" Margin="0 0 0 10">
                     <Label Style="{StaticResource LabelAligment}" Content="Описание:" Target="{Binding ElementName=RichTextBox}"></Label>
                     <TextBox Margin="0 0 30 0" Name="DescriptionTextBox" Width="300" TextWrapping="Wrap"></TextBox>
-                    <Button Style="{StaticResource PurpleButton}" Click="AddTransactionButton_Click" Height="30" Content="Добавить"></Button>
+                    <Button Style="{StaticResource PurpleButton}" Click="AddTransactionButton_Click"  Content="Добавить"></Button>
                 </StackPanel>
             </StackPanel>
             <Grid Grid.Row="1">
